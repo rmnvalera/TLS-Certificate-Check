@@ -2,9 +2,7 @@ package com.ozgeek;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ozgeek.configurations.ConfigurationApp;
-import com.ozgeek.configurations.Person;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -15,15 +13,15 @@ public class Configuration implements ConfigurationApp {
   private List<String> listCaCertificate;
 
   @JsonProperty
-  @Valid
-  private Person person;
+  @NotNull
+  private String pathToFileDB;
 
 
   public String[] getListCaCertificate() {
     return listCaCertificate.toArray(new String[0]);
   }
 
-  public Person getPerson() {
-    return person;
+  public String getPathToFileDB() {
+    return pathToFileDB;
   }
 }

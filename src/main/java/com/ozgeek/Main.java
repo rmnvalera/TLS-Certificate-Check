@@ -1,6 +1,7 @@
 package com.ozgeek;
 
 
+import com.ozgeek.filedb.FileDbManager;
 import com.ozgeek.tls.DomainCheckWorker;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
@@ -19,8 +20,14 @@ public class Main extends Application<Configuration>{
 
   @Override
   public void run(Configuration configuration) throws CertificateException {
-    DomainCheckWorker domainCheckWorker = new DomainCheckWorker(configuration.getListCaCertificate());
-    domainCheckWorker.getCertificate("https://im.dstarlab.com");
+
+    FileDbManager dbManager = new FileDbManager(configuration.getPathToFileDB());
+//    List<URL>     hosts     = dbManager.readAll();
+//    dbManager.write("docs.oracle.com");
+//    dbManager.delete("docs.oracle.com");
+
+    DomainCheckWorker domainCheckWorker = new DomainCheckWorker(dbManager, configuration.getListCaCertificate());
+    domainCheckWorker.run();
   }
 
   public static void main(String[] args) throws Exception {
