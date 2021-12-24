@@ -1,0 +1,9 @@
+target
+local.properties
+.idea
+*.iml
+
+
+config/production.yml
+config/config.yml
+config/testing.yml
