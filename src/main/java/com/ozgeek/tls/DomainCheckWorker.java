@@ -1,5 +1,6 @@
 package com.ozgeek.tls;
 
+import com.ozgeek.TelegramBot.TelegramBot;
 import com.ozgeek.filedb.FileDbManager;
 import com.ozgeek.utils.CertificateUtil;
 import com.ozgeek.utils.Util;
@@ -26,19 +27,21 @@ public class DomainCheckWorker {
 
   private final SSLContext    sslContext;
   private final FileDbManager dbManager;
+  private final TelegramBot   bot;
 
   private final long sleepInterval;
 
-  public DomainCheckWorker(FileDbManager dbManager, String[] pemCaCert) throws CertificateException {
-    this(dbManager, pemCaCert, TimeUnit.DAYS.toMillis(1));
+  public DomainCheckWorker(FileDbManager dbManager, String[] pemCaCert, TelegramBot bot) throws CertificateException {
+    this(dbManager, pemCaCert, bot, TimeUnit.DAYS.toMillis(1));
   }
 
-  public DomainCheckWorker(FileDbManager dbManager, String[] pemCaCert, long sleepInterval)
+  public DomainCheckWorker(FileDbManager dbManager, String[] pemCaCert, TelegramBot bot, long sleepInterval)
           throws CertificateException
   {
     this.sslContext    = initializeClient(pemCaCert);
     this.dbManager     = dbManager;
     this.sleepInterval = sleepInterval;
+    this.bot           = bot;
   }
 
   public void run() {
@@ -72,6 +75,7 @@ public class DomainCheckWorker {
   }
 
   public void getCertificate(String host) {
+    String message;
     try {
       URL                destinationURL   = new URL(host);
       HttpsURLConnection conn             = (HttpsURLConnection) destinationURL.openConnection();
@@ -83,11 +87,15 @@ public class DomainCheckWorker {
       for (Certificate certificate : certs) {
         Date dateExpired = ((X509Certificate) certificate).getNotAfter();
         if (dateExpired.getTime() - TimeUnit.DAYS.toMillis(7) <= System.currentTimeMillis()) {
-          logger.warn(String.format("Domain certificate: %s, expires %s", destinationURL.getHost(), dateExpired));
+          message = String.format("Domain certificate: %s, expires %s", destinationURL.getHost(), dateExpired);
+          logger.warn(message);
+          bot.sendMessageToGroup(message);
         }
       }
     } catch (IOException e) {
-      logger.warn("TLS exception: " + e.getMessage());
+      message = String.format("TLS exception: %s check your domain", host);
+      logger.warn(message);
+      bot.sendMessageToGroup(message);
     }
   }
 

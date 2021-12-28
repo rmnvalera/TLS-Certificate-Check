@@ -41,7 +41,7 @@ public class Main extends Application<Configuration> {
     bot.sendMessageToGroup("Let's get starting: /start");
 
 
-    DomainCheckWorker domainCheckWorker = new DomainCheckWorker(dbManager, configuration.getListCaCertificate());
+    DomainCheckWorker domainCheckWorker = new DomainCheckWorker(dbManager, configuration.getListCaCertificate(), bot);
     domainCheckWorker.run();
   }
 
