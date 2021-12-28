@@ -1,0 +1,5 @@
+listCaCertificate:
+  - "-----BEGIN CERTIFICATE-----\r\n  ........  \r\n-----END CERTIFICATE-----"
+  - "-----BEGIN CERTIFICATE-----\r\n  ........  \r\n-----END CERTIFICATE-----"
+
+pathToFileDB: file.db
