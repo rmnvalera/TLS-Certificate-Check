@@ -3,6 +3,7 @@ package com.ozgeek;
 import com.ozgeek.configurations.BaseConfigurationFactory;
 import com.ozgeek.configurations.ConfigurationApp;
 import com.ozgeek.utils.Generics;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -18,6 +19,6 @@ public class Application<T extends ConfigurationApp> {
   protected Class<T> getConfigurationClass() {
     return Generics.getTypeParameter(getClass(), ConfigurationApp.class);
   }
-  protected void run(T config) throws IOException, CertificateException {
+  protected void run(T config) throws IOException, CertificateException, TelegramApiException {
   }
 }
