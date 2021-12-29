@@ -7,3 +7,4 @@ local.properties
 config/production.yml
 config/config.yml
 config/testing.yml
+dependency-reduced-pom.xml
